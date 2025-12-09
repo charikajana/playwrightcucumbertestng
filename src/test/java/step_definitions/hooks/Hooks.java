@@ -1,6 +1,7 @@
 package step_definitions.hooks;
 
 import io.cucumber.java.*;
+import io.qameta.allure.Allure;
 import org.sabre.Browserfactory.BrowserManager;
 
 public class Hooks {
@@ -24,8 +25,12 @@ public class Hooks {
 
     //Runs before each test
     @Before
-    public void setup() {
+    public void setup(Scenario scenario) {
         System.out.println("\nStarted Before executing the test!");
+        // Add dynamic Allure labels/parameters
+        Allure.label("browser", "Chrome");
+        Allure.label("os", System.getProperty("os.name"));
+        Allure.label("env", "QA");
         browserManager.setUp();
     }
 

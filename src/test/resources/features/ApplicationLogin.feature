@@ -1,4 +1,4 @@
-@webdriveruniversityOne
+@webdriveruniversityTwo
 Feature: WebdriverUniversity.com - Application Login
 
   Scenario: Valid Contact Us Form Submission

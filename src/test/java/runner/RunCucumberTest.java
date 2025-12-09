@@ -4,6 +4,7 @@ import io.cucumber.testng.AbstractTestNGCucumberTests;
 import io.cucumber.testng.CucumberOptions;
 import org.testng.TestNG;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 import org.testng.xml.XmlClass;
 import org.testng.xml.XmlSuite;
 import org.testng.xml.XmlTest;
@@ -18,12 +19,15 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
 @CucumberOptions(
         features = "src/test/resources/features",
         glue = "step_definitions",
-        tags = "@webdriveruniversityOne",
+        tags = "@webdriveruniversityTwo",
         dryRun = false,
-        plugin = {"pretty", "json:target/cucumber.json", "html:target/cucumber-report.html"}
+        plugin = {"pretty", "json:target/cucumber.json",
+                "html:target/cucumber-report.html",
+                "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"}
 )
 public class RunCucumberTest extends AbstractTestNGCucumberTests {
     private static final Logger logger = Logger.getLogger(RunCucumberTest.class.getName());
