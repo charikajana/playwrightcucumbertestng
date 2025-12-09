@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 @CucumberOptions(
         features = "src/test/resources/features",
         glue = "step_definitions",
-        tags = "@webdriveruniversityOne",
+        tags = "@webdriveruniversityTwo",
         dryRun = false,
         plugin = {"pretty", "json:target/cucumber.json",
                 "html:target/cucumber-report.html",
