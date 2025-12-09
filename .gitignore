@@ -1,0 +1,6 @@
+# Ignore build output
+target/
+
+# Ignore JetBrains IDE settings
+.idea/
+
