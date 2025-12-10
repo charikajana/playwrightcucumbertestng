@@ -31,11 +31,11 @@ echo Running: %MVN_CMD%
 %MVN_CMD%
 set "MVN_EXIT_CODE=%errorlevel%"
 
+REM Always generate Allure report, even if Maven fails
 allure serve allure-results
-
-echo All done!
 
 REM Return to original directory
 cd "%CUR_DIR%"
+echo All done!
 endlocal
 exit /b %MVN_EXIT_CODE%

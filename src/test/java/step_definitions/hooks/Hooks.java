@@ -1,8 +1,14 @@
 package step_definitions.hooks;
 
+import com.microsoft.playwright.Page;
 import io.cucumber.java.*;
 import io.qameta.allure.Allure;
 import org.sabre.Browserfactory.BrowserManager;
+
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Hooks {
     private final BrowserManager browserManager;
@@ -15,6 +21,20 @@ public class Hooks {
     @BeforeAll
     public static void beforeAll() {
         System.out.println("\nExecuting test suite....");
+        // Create environment.properties in allure-results
+        String allureResultsPath = System.getProperty("user.dir") + File.separator + "allure-results";
+        File envFile = new File(allureResultsPath, "environment.properties");
+        try {
+            envFile.getParentFile().mkdirs();
+            FileWriter writer = new FileWriter(envFile);
+            writer.write("Browser=Chrome\n");
+            writer.write("OS=" + System.getProperty("os.name") + "\n");
+            writer.write("Env=QA\n");
+            writer.write("ThreadCount=1\n"); // You can make this dynamic if needed
+            writer.close();
+        } catch (IOException e) {
+            System.out.println("Failed to create environment.properties: " + e.getMessage());
+        }
     }
 
     //Runs once after all tests are done
@@ -27,10 +47,6 @@ public class Hooks {
     @Before
     public void setup(Scenario scenario) {
         System.out.println("\nStarted Before executing the test!");
-        // Add dynamic Allure labels/parameters
-        Allure.label("browser", "Chrome");
-        Allure.label("os", System.getProperty("os.name"));
-        Allure.label("env", "QA");
         browserManager.setUp();
     }
 
@@ -38,8 +54,8 @@ public class Hooks {
     @After
     public void tearDown(Scenario scenario) {
         if (scenario.isFailed()) {
-            byte[] screenshot = browserManager.takeScreenshot();
-            scenario.attach(screenshot, "image/png", "screenshot");
+            byte[] screenshot = browserManager.getPage().screenshot(new Page.ScreenshotOptions().setFullPage(true));
+            Allure.addAttachment("Screenshot", new ByteArrayInputStream(screenshot));
         }
         browserManager.tearDown();
     }
