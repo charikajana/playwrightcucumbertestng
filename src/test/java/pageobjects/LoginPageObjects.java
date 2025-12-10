@@ -37,6 +37,7 @@ public class LoginPageObjects extends BasePage {
 
     public void clickLoginButton() {
         waitAndClick(LOGIN_BUTTON);
+        getScreenshot();
     }
 
 

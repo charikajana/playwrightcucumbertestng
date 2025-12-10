@@ -6,6 +6,9 @@ import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.options.SelectOption;
 import com.microsoft.playwright.options.WaitForSelectorState;
 import org.sabre.Browserfactory.BrowserManager;
+import io.qameta.allure.Allure;
+
+import java.io.ByteArrayInputStream;
 
 public class BasePage {
     private final BrowserManager browserManager;
@@ -75,6 +78,14 @@ public class BasePage {
         Page firstPage = browserManager.getContext().pages().get(0);
         browserManager.setPage(firstPage);
         firstPage.bringToFront();
+    }
+    public void takeScreenshot(String fileName) {
+        browserManager.getPage().screenshot(new Page.ScreenshotOptions().setPath(java.nio.file.Paths.get("screenshots/" + fileName + ".png")));
+    }
+
+    public void getScreenshot() {
+        byte[] screenshot = browserManager.getPage().screenshot(new Page.ScreenshotOptions().setFullPage(true));
+        Allure.addAttachment("Screenshot", new ByteArrayInputStream(screenshot));
     }
 
 }

@@ -3,6 +3,7 @@ package pageobjects;
 import io.cucumber.java.en.Then;
 import org.sabre.Browserfactory.BrowserManager;
 import org.sabre.basefactory.BasePage;
+import org.testng.Assert;
 
 import java.util.logging.Logger;
 
