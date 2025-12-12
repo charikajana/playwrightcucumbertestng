@@ -4,6 +4,9 @@ package pageobjects;
 import org.sabre.Browserfactory.BrowserManager;
 import org.sabre.basefactory.BasePage;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.logging.Logger;
 
 /**
@@ -39,6 +42,22 @@ public class LoginPageObjects extends BasePage {
         waitAndClick(LOGIN_BUTTON);
         getScreenshot();
     }
+
+    public String getLocator(String htmlpage,String Lablel) throws IOException, InterruptedException {
+        String locator ="";
+        try{
+            ProcessBuilder pb = new ProcessBuilder("python", "gpt_locator.py", "--html", htmlpage, "--description", Lablel);
+            Process process = pb.start();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+             locator = reader.readLine();
+            process.waitFor();
+        }catch(Exception e){
+            logger.severe("Error in getting locator: " + e.getMessage());
+        }
+        return locator;
+
+    }
+
 
 
 }

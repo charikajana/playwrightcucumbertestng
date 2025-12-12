@@ -87,5 +87,8 @@ public class BasePage {
         byte[] screenshot = browserManager.getPage().screenshot(new Page.ScreenshotOptions().setFullPage(true));
         Allure.addAttachment("Screenshot", new ByteArrayInputStream(screenshot));
     }
+    public String getContent() {
+        return browserManager.getPage().content();
+    }
 
 }

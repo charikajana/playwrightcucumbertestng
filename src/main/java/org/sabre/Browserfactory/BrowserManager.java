@@ -8,6 +8,8 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -66,7 +68,11 @@ public class BrowserManager {
 
         switch (browserType.toLowerCase()) {
             case "chromium":
-               browser.set(playwright.get().chromium().launch(new BrowserType.LaunchOptions().setHeadless(false)));
+               browser.set(playwright.get().chromium().launch(new BrowserType.LaunchOptions().setArgs(
+                       Arrays.asList(
+                               "--incognito"
+                       )
+               ).setHeadless(false)));
                 break;
             case "firefox":
                 browser.set(playwright.get().firefox().launch(new BrowserType.LaunchOptions().setHeadless(false)));
