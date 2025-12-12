@@ -4,6 +4,8 @@ import java.text.DecimalFormat;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ExecutionSummary {
     private static LocalDateTime startTime;
@@ -11,6 +13,9 @@ public class ExecutionSummary {
     private static int totalTests = 0;
     private static int passed = 0;
     private static int failed = 0;
+    private static String environment = "-";
+    private static String browser = "-";
+    private static final Set<String> tags = new HashSet<>();
 
     public static void markStart() {
         startTime = LocalDateTime.now();
@@ -79,5 +84,28 @@ public class ExecutionSummary {
         startTime = null;
         endTime = null;
     }
-}
 
+    public static void setEnvironment(String env) {
+        environment = env;
+    }
+
+    public static String getEnvironment() {
+        return environment;
+    }
+
+    public static void setBrowser(String browserName) {
+        browser = browserName;
+    }
+
+    public static String getBrowser() {
+        return browser;
+    }
+
+    public static void addTags(Set<String> scenarioTags) {
+        tags.addAll(scenarioTags);
+    }
+
+    public static String getTags() {
+        return tags.isEmpty() ? "-" : String.join(", ", tags);
+    }
+}

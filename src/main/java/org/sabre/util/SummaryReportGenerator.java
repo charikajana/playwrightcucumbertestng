@@ -6,6 +6,9 @@ public class SummaryReportGenerator {
                 "<body>" +
                 "<h2>Automation Execution Summary</h2>" +
                 "<table border='1' cellpadding='5' cellspacing='0'>" +
+                "<tr><th>Environment</th><td>" + ExecutionSummary.getEnvironment() + "</td></tr>" +
+                "<tr><th>Browser</th><td>" + ExecutionSummary.getBrowser() + "</td></tr>" +
+                "<tr><th>Tags Used</th><td>" + ExecutionSummary.getTags() + "</td></tr>" +
                 "<tr><th>Execution Start</th><td>" + ExecutionSummary.getStartTime() + "</td></tr>" +
                 "<tr><th>Execution End</th><td>" + ExecutionSummary.getEndTime() + "</td></tr>" +
                 "<tr><th>Duration</th><td>" + ExecutionSummary.getDuration() + "</td></tr>" +

@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 public class Hooks {
     private final BrowserManager browserManager;
@@ -27,6 +28,9 @@ public class Hooks {
     public static void beforeAll() {
         System.out.println("\nExecuting test suite....");
         ExecutionSummary.markStart();
+        // Set environment and browser (replace with actual logic if needed)
+        ExecutionSummary.setEnvironment("QA"); // Or read from config
+        ExecutionSummary.setBrowser("Chrome"); // Or read from config
         // Create environment.properties in allure-results
         String allureResultsPath = System.getProperty("user.dir") + File.separator + "allure-results";
         File envFile = new File(allureResultsPath, "environment.properties");
@@ -88,6 +92,8 @@ public class Hooks {
     @After
     public void tearDown(Scenario scenario) {
         ExecutionSummary.incrementTotal();
+        // Collect tags for this scenario
+        ExecutionSummary.addTags(scenario.getSourceTagNames().stream().map(tag -> tag.replace("@", "")).collect(Collectors.toSet()));
         if (scenario.isFailed()) {
             ExecutionSummary.incrementFailed();
             byte[] screenshot = browserManager.getPage().screenshot(new Page.ScreenshotOptions().setFullPage(true));
