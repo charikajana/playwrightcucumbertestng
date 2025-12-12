@@ -23,6 +23,9 @@
         <aspectj.version>1.9.21</aspectj.version>
         <allure.version>2.25.0</allure.version>
         <allure.maven>2.12.0</allure.maven>
+        <allure.java.commons.version>2.24.0</allure.java.commons.version>
+        <jackson.databind.version>2.17.1</jackson.databind.version>
+        <jakarta.mail.version>2.0.1</jakarta.mail.version>
 
 
 
@@ -94,19 +97,19 @@
         <dependency>
             <groupId>io.qameta.allure</groupId>
             <artifactId>allure-java-commons</artifactId>
-            <version>2.24.0</version>
+            <version>${allure.java.commons.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.17.1</version>
+            <version>${jackson.databind.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.sun.mail</groupId>
             <artifactId>jakarta.mail</artifactId>
-            <version>2.0.1</version>
+            <version>${jakarta.mail.version}</version>
         </dependency>
 
         <!-- Removed explicit io.cucumber:messages dependency to avoid version conflict -->
