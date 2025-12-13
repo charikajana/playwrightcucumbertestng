@@ -26,9 +26,6 @@
         <allure.java.commons.version>2.24.0</allure.java.commons.version>
         <jackson.databind.version>2.17.1</jackson.databind.version>
         <jakarta.mail.version>2.0.1</jakarta.mail.version>
-
-
-
     </properties>
 
     <dependencyManagement>
@@ -117,6 +114,23 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>RunCucumberTest</id>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>runner.RunCucumberTest</mainClass>
+                            <classpathScope>test</classpathScope>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven.compiler.plugin.version}</version>
@@ -158,6 +172,4 @@
             </plugin>
         </plugins>
     </build>
-
-
 </project>
