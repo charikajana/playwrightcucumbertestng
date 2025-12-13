@@ -17,7 +17,7 @@ public class AllureDirectorySetup {
         deleteFolder(new File(System.getProperty("user.dir") + "/allure-results"));
         dateDir = getDateDir();
         timeDir = getTimeDir();
-        allureBaseDir = "src/test/reports/" + dateDir + "/" + timeDir;
+        allureBaseDir = "reports/" + dateDir + "/" + timeDir;
         allureResultsDir = allureBaseDir + "/allure-results";
         allureReportDir = allureBaseDir + "/allure-report";
         System.setProperty("allure.results.directory", allureResultsDir);
@@ -57,19 +57,45 @@ public class AllureDirectorySetup {
             copyFolder(defaultResults, dynamicResults);
             deleteFolder(defaultResults);
         }
-        // Generate Allure report from dynamic directory
+        // Generate Allure report from dynamic directory using Allure CLI
         if (dynamicResults.exists() && dynamicResults.isDirectory() && dynamicResults.list().length > 0) {
             try {
-                String allureCmd = "allure generate " + allureResultsDir + " --clean -o " + allureReportDir;
-                Process process = Runtime.getRuntime().exec(allureCmd);
+                String allureCmd;
+                if (System.getProperty("os.name").toLowerCase().contains("win")) {
+                    // Try allure.bat, then allure.cmd, then allure
+                    String[] winCmds = {"allure.bat", "allure.cmd", "allure"};
+                    allureCmd = null;
+                    for (String cmd : winCmds) {
+                        try {
+                            Process check = new ProcessBuilder(cmd, "--version").start();
+                            if (check.waitFor() == 0) {
+                                allureCmd = cmd;
+                                break;
+                            }
+                        } catch (Exception ignored) {}
+                    }
+                    if (allureCmd == null) {
+                        System.out.println("Allure CLI not found in PATH. Please ensure Allure CLI is installed and added to your PATH.");
+                        return;
+                    }
+                } else {
+                    allureCmd = "allure";
+                }
+                String[] command = {allureCmd, "generate", "allure-results", "-o", "allure-report", "--clean"};
+                Process process = new ProcessBuilder(command)
+                        .directory(new File(allureBaseDir))
+                        .inheritIO()
+                        .start();
                 int exitCode = process.waitFor();
                 if (exitCode != 0) {
-                    System.out.println("Allure report generation failed with exit code: " + exitCode);
+                    System.out.println("Allure report generation via Allure CLI failed with exit code: " + exitCode);
                 } else {
                     System.out.println("Allure report generated at: " + allureReportDir);
                 }
+            } catch (IOException e) {
+                System.out.println("Failed to generate Allure report via Allure CLI: Allure executable not found in PATH. Please ensure Allure CLI is installed and added to your PATH.");
             } catch (Exception e) {
-                System.out.println("Failed to generate Allure report: " + e.getMessage());
+                System.out.println("Failed to generate Allure report via Allure CLI: " + e.getMessage());
             }
         } else {
             System.out.println("No Allure results found to generate report.");

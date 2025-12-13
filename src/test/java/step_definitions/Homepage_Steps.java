@@ -28,8 +28,8 @@ public class Homepage_Steps {
     }
     @When("enter username and password")
     public void enter_username_and_password() {
-        loginPageObjects.enterUserName("QA_Sabre");
-        loginPageObjects.enterPassword("Te5t@1234");
+        loginPageObjects.enterUserName("QASabreClientAgentAdmin");
+        loginPageObjects.enterPassword("Demo@321$");
     }
     @And("click login button")
     public void click_login_button() {

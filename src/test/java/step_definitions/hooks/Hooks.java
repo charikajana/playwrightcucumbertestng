@@ -7,6 +7,7 @@ import org.sabre.Browserfactory.BrowserManager;
 import org.sabre.util.ExecutionSummary;
 import org.sabre.util.EmailNotifier;
 import org.sabre.util.SummaryReportGenerator;
+import org.sabre.util.AllureDirectorySetup;
 
 import jakarta.mail.MessagingException;
 import java.io.ByteArrayInputStream;
@@ -27,12 +28,13 @@ public class Hooks {
     @BeforeAll
     public static void beforeAll() {
         System.out.println("\nExecuting test suite....");
+        AllureDirectorySetup.setup();
         ExecutionSummary.markStart();
         // Set environment and browser (replace with actual logic if needed)
         ExecutionSummary.setEnvironment("QA"); // Or read from config
         ExecutionSummary.setBrowser("Chrome"); // Or read from config
         // Create environment.properties in allure-results
-        String allureResultsPath = System.getProperty("user.dir") + File.separator + "allure-results";
+        String allureResultsPath = System.getProperty("user.dir") + File.separator + "/allure-results";
         File envFile = new File(allureResultsPath, "environment.properties");
         try {
             envFile.getParentFile().mkdirs();
@@ -52,6 +54,7 @@ public class Hooks {
     public static void afterAll() {
         System.out.println("\nFinished executing the test suite!");
         ExecutionSummary.markEnd();
+        AllureDirectorySetup.copyResultsAndGenerateReport();
         // Only send summary email if running in Jenkins
         String jenkinsHome = System.getenv("JENKINS_HOME");
         if (jenkinsHome != null && !jenkinsHome.isEmpty()) {
