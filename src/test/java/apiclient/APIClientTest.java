@@ -1,8 +1,8 @@
-package org.sabre.apiclient;
+package apiclient;
 
 
+import org.sabre.apiclient.APIClient;
 import org.testng.Assert;
-import org.testng.annotations.Test;
 
 import java.net.http.HttpResponse;
 import java.util.HashMap;

@@ -1,5 +1,5 @@
-@webdriveruniversityOne
-Feature: WebdriverUniversity.com - Contact Us Page
+@feature:Login @story:User_logs_in_with_valid_credentials @severity:critical @ui
+Feature: WebdriverUniversity.com - Application Login
 
   Scenario: Valid Contact Us Form Submission
     Given navigate to hotelbooker application

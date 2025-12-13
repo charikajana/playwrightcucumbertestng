@@ -2,6 +2,8 @@ package runner;
 
 import io.cucumber.testng.AbstractTestNGCucumberTests;
 import io.cucumber.testng.CucumberOptions;
+import org.sabre.applicationConstants.ApplicationConstant;
+import org.sabre.util.EnvPropertyLoader;
 import org.testng.TestNG;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -9,11 +11,6 @@ import org.testng.xml.XmlClass;
 import org.testng.xml.XmlSuite;
 import org.testng.xml.XmlTest;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -31,19 +28,7 @@ import java.util.logging.Logger;
 )
 public class RunCucumberTest extends AbstractTestNGCucumberTests {
     private static final Logger logger = Logger.getLogger(RunCucumberTest.class.getName());
-    private static final Properties properties = new Properties();
-
-    //Static block to load properties file
-    static {
-        Path configPath = Paths.get(System.getProperty("config.path",
-                Paths.get(System.getProperty("user.dir"), "src", "test", "resources","env",
-                        "dev.properties").toString()));
-        try(InputStream input = Files.newInputStream(configPath)) {
-            properties.load(input);
-        }catch (IOException e) {
-            logger.log(Level.SEVERE, "Failed to load properties file!", e);
-        }
-    }
+    private static final Properties properties = EnvPropertyLoader.getProperties();
 
     public static void main(String[] args) {
         //Create an instance of TestNG
@@ -74,25 +59,25 @@ public class RunCucumberTest extends AbstractTestNGCucumberTests {
         testNG.run();
     }
 
-    //Method to get thread count from properties file
+    //Method to get thread count from system property or properties file
     private static int getThreadCount() {
-        // 1. Check system property
-        String sysProp = System.getProperty("ThreadCount");
+        // 1. Check system property (highest priority)
+        String sysProp = System.getProperty(ApplicationConstant.THREAD_COUNT);
         if (sysProp != null && !sysProp.trim().isEmpty()) {
             try {
                 int val = Integer.parseInt(sysProp.trim());
                 if (val > 0) return val;
             } catch (NumberFormatException ignored) {}
         }
-        // 2. Check property file
-        String propFileVal = properties.getProperty("ThreadCount");
+        // 2. Check property file (if system property not set or invalid)
+        String propFileVal = properties.getProperty(ApplicationConstant.THREAD_COUNT);
         if (propFileVal != null && !propFileVal.trim().isEmpty()) {
             try {
                 int val = Integer.parseInt(propFileVal.trim());
                 if (val > 0) return val;
             } catch (NumberFormatException ignored) {}
         }
-        // 3. Default
+        // 3. Default (if neither is set or both are invalid)
         return 1;
     }
 

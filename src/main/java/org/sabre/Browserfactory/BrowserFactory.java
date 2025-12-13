@@ -1,13 +1,10 @@
 package org.sabre.Browserfactory;
 
 import com.microsoft.playwright.*;
+import org.sabre.applicationConstants.ApplicationConstant;
+import org.sabre.util.EnvPropertyLoader;
 
 import java.awt.*;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -22,17 +19,7 @@ public class BrowserFactory {
     private static final Logger logger = Logger.getLogger(BrowserFactory.class.getName());
 
     public BrowserFactory() {
-        properties = new Properties();
-        //creates a path to a configuration file. If "config.path" isn't set,
-        //it defaults to a file located in "src/main/resources/config.properties
-        Path configPath = Paths.get(System.getProperty("config.path",
-                Paths.get(System.getProperty("user.dir"), "src", "main", "resources",
-                        "config.properties").toString()));
-        try(InputStream input = Files.newInputStream(configPath)) {
-            properties.load(input);
-        }catch (IOException e) {
-            logger.log(Level.SEVERE, "Failed to load properties file!", e);
-        }
+        properties = EnvPropertyLoader.getProperties();
     }
 
     public Page getPage() {
@@ -63,7 +50,7 @@ public class BrowserFactory {
 
         playwright.set(Playwright.create());
 
-        String browserType = properties.getProperty("browser", "chromium");
+        String browserType = properties.getProperty(ApplicationConstant.BROWSER_NAME, "chromium");
 
         switch (browserType.toLowerCase()) {
             case "chromium":
@@ -102,4 +89,3 @@ public class BrowserFactory {
 
     }
 }
-

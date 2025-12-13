@@ -25,8 +25,8 @@ public class Homepage_Steps {
     }
     @When("enter username and password")
     public void enter_username_and_password() {
-        loginPageObjects.enterUserName("QASabreClientAgentAdmin");
-        loginPageObjects.enterPassword("Demo@321$");
+        loginPageObjects.enterUserName();
+        loginPageObjects.enterPassword();
     }
     @And("click login button")
     public void click_login_button() {

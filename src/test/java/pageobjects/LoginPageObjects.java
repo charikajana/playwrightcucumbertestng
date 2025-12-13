@@ -2,7 +2,9 @@ package pageobjects;
 
 
 import org.sabre.Browserfactory.BrowserFactory;
+import org.sabre.applicationConstants.ApplicationConstant;
 import org.sabre.basefactory.PlaywrightActions;
+import org.sabre.util.EnvPropertyLoader;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,15 +28,15 @@ public class LoginPageObjects extends PlaywrightActions {
     }
 
     public void navigateToLoginPage() {
-        navigate("https://hotelbooker.cert.sabre.com/");
+        navigate(EnvPropertyLoader.getProperty(ApplicationConstant.URL));
     }
 
-    public void enterUserName(String username) {
-        waitAndEnterText(USERNAME_FIELD, username);
+    public void enterUserName() {
+        waitAndEnterText(USERNAME_FIELD, EnvPropertyLoader.getProperty(ApplicationConstant.USER_NAME));
     }
 
-    public void enterPassword(String password) {
-        waitAndEnterText(PASSWORD_FIELD, password);
+    public void enterPassword() {
+        waitAndEnterText(PASSWORD_FIELD, EnvPropertyLoader.getProperty(ApplicationConstant.PASSWORD));
 
     }
 
