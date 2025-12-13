@@ -3,7 +3,7 @@ target/
 
 # Ignore JetBrains IDE settings
 .idea/
-
+.allure
 # Ignore OS generated files
 .DS_Store
 Thumbs.db
