@@ -23,9 +23,9 @@ public class AllureDirectorySetup {
         System.setProperty("allure.results.directory", allureResultsDir);
         System.setProperty("allure.report.directory", allureReportDir);
         // Create date and time directories if not present
-        File dateDirFile = new File("src/test/reports/" + dateDir);
+        File dateDirFile = new File("reports/" + dateDir);
         if (!dateDirFile.exists()) dateDirFile.mkdirs();
-        File timeDirFile = new File("src/test/reports/" + dateDir + "/" + timeDir);
+        File timeDirFile = new File("reports/" + dateDir + "/" + timeDir);
         if (!timeDirFile.exists()) timeDirFile.mkdirs();
         // Create results and report directories if not present
         File resultsDir = new File(allureResultsDir);

@@ -2,8 +2,6 @@ package step_definitions;
 
 
 import io.cucumber.java.en.When;
-import org.sabre.Browserfactory.BrowserManager;
-import org.sabre.basefactory.BasePage;
 import pageobjects.ClientSelectionPageObjects;
 
 public class ClientSelection_Steps {

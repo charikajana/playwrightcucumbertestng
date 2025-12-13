@@ -1,11 +1,11 @@
 package pageobjects;
 
-import org.sabre.Browserfactory.BrowserManager;
-import org.sabre.basefactory.BasePage;
+import org.sabre.Browserfactory.BrowserFactory;
+import org.sabre.basefactory.PlaywrightActions;
 
 import java.util.logging.Logger;
 
-public class AgencyAdminPageObjects extends BasePage {
+public class AgencyAdminPageObjects extends PlaywrightActions {
     private static final Logger logger = Logger.getLogger(LoginPageObjects.class.getName());
 
     private final String TRAVEL_POLICY_LINK = "#ctl00_travelPolicyNav_TravelPolicyNavigationTitle";
@@ -13,8 +13,8 @@ public class AgencyAdminPageObjects extends BasePage {
     private final String POLICY_ACTIVE_CHECKBOX = "#ctl00_cphMainContent_policyActiveChk";
     private final String UPDATE_POLICY_BUTTON = "#ctl00_cphMainContent_btnUpdate";
 
-    public AgencyAdminPageObjects(BrowserManager browserManager) {
-        super(browserManager);
+    public AgencyAdminPageObjects(BrowserFactory browserFactory) {
+        super(browserFactory);
     }
 
     public void clickOnTravelPolicy(){

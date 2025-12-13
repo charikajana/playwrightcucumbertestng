@@ -3,7 +3,7 @@ package step_definitions.hooks;
 import com.microsoft.playwright.Page;
 import io.cucumber.java.*;
 import io.qameta.allure.Allure;
-import org.sabre.Browserfactory.BrowserManager;
+import org.sabre.Browserfactory.BrowserFactory;
 import org.sabre.util.ExecutionSummary;
 import org.sabre.util.EmailNotifier;
 import org.sabre.util.SummaryReportGenerator;
@@ -18,10 +18,10 @@ import java.util.Properties;
 import java.util.stream.Collectors;
 
 public class Hooks {
-    private final BrowserManager browserManager;
+    private final BrowserFactory browserFactory;
 
-    public Hooks(BrowserManager browserManager) {
-        this.browserManager = browserManager;
+    public Hooks(BrowserFactory browserFactory) {
+        this.browserFactory = browserFactory;
     }
 
     //Runs once before all tests start
@@ -88,7 +88,7 @@ public class Hooks {
     @Before
     public void setup(Scenario scenario) {
         System.out.println("\nStarted Before executing the test!");
-        browserManager.setUp();
+        browserFactory.setUp();
     }
 
     //Runs after each test
@@ -99,11 +99,11 @@ public class Hooks {
         ExecutionSummary.addTags(scenario.getSourceTagNames().stream().map(tag -> tag.replace("@", "")).collect(Collectors.toSet()));
         if (scenario.isFailed()) {
             ExecutionSummary.incrementFailed();
-            byte[] screenshot = browserManager.getPage().screenshot(new Page.ScreenshotOptions().setFullPage(true));
+            byte[] screenshot = browserFactory.getPage().screenshot(new Page.ScreenshotOptions().setFullPage(true));
             Allure.addAttachment("Screenshot", new ByteArrayInputStream(screenshot));
         } else {
             ExecutionSummary.incrementPassed();
         }
-        browserManager.tearDown();
+        browserFactory.tearDown();
     }
 }

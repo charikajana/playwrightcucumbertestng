@@ -5,39 +5,39 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.options.SelectOption;
 import com.microsoft.playwright.options.WaitForSelectorState;
-import org.sabre.Browserfactory.BrowserManager;
+import org.sabre.Browserfactory.BrowserFactory;
 import io.qameta.allure.Allure;
 
 import java.io.ByteArrayInputStream;
 
-public class BasePage {
-    private final BrowserManager browserManager;
+public class PlaywrightActions {
+    private final BrowserFactory browserFactory;
 
-    public BasePage(BrowserManager browserManager) {
-        this.browserManager = browserManager;
+    public PlaywrightActions(BrowserFactory browserFactory) {
+        this.browserFactory = browserFactory;
     }
 
     //In Java, "protected" means that the member can be accessed by classes in the same package or subclasses.
-    protected BrowserManager getBrowserManager() {
-        return browserManager;
+    protected BrowserFactory getBrowserManager() {
+        return browserFactory;
     }
 
     public void navigate(String url) {
-        browserManager.getPage().navigate(url);
+        browserFactory.getPage().navigate(url);
     }
 
     public Locator Locator(String locator) {
-        return browserManager.getPage().locator(locator);
+        return browserFactory.getPage().locator(locator);
     }
 
     public void waitAndClickByRole(String role, String name) {
-        Locator element = browserManager.getPage().getByRole(AriaRole.valueOf(role.toUpperCase()), new Page.GetByRoleOptions().setName(name));
+        Locator element = browserFactory.getPage().getByRole(AriaRole.valueOf(role.toUpperCase()), new Page.GetByRoleOptions().setName(name));
         element.click();
     }
 
     public void waitAndClickBySelector(String selector) {
-        browserManager.getPage().waitForSelector(selector, new Page.WaitForSelectorOptions().setState(WaitForSelectorState.VISIBLE));
-        browserManager.getPage().click(selector);
+        browserFactory.getPage().waitForSelector(selector, new Page.WaitForSelectorOptions().setState(WaitForSelectorState.VISIBLE));
+        browserFactory.getPage().click(selector);
     }
 
     public void waitAndClick(String locator)
@@ -51,15 +51,15 @@ public class BasePage {
     }
 
     public void switchToNewWindowAfterClick(String Locator) {
-        Page newPage = browserManager.getContext().waitForPage(() -> {
-            browserManager.getPage().click(Locator);
+        Page newPage = browserFactory.getContext().waitForPage(() -> {
+            browserFactory.getPage().click(Locator);
         });
-        browserManager.setPage(newPage);
-        browserManager.getPage().bringToFront();
+        browserFactory.setPage(newPage);
+        browserFactory.getPage().bringToFront();
     }
 
     public void selectDropdownByValue(String locator, String value) {
-        browserManager.getPage().selectOption(locator, new SelectOption().setLabel(value));
+        browserFactory.getPage().selectOption(locator, new SelectOption().setLabel(value));
     }
 
     public void waitAndUncheckCheckbox(String locator) {
@@ -73,22 +73,22 @@ public class BasePage {
     }
 
     public void closeCurrentPageAndSwitch(){
-        Page currentPage = browserManager.getPage();
+        Page currentPage = browserFactory.getPage();
         currentPage.close();
-        Page firstPage = browserManager.getContext().pages().get(0);
-        browserManager.setPage(firstPage);
+        Page firstPage = browserFactory.getContext().pages().get(0);
+        browserFactory.setPage(firstPage);
         firstPage.bringToFront();
     }
     public void takeScreenshot(String fileName) {
-        browserManager.getPage().screenshot(new Page.ScreenshotOptions().setPath(java.nio.file.Paths.get("screenshots/" + fileName + ".png")));
+        browserFactory.getPage().screenshot(new Page.ScreenshotOptions().setPath(java.nio.file.Paths.get("screenshots/" + fileName + ".png")));
     }
 
     public void getScreenshot() {
-        byte[] screenshot = browserManager.getPage().screenshot(new Page.ScreenshotOptions().setFullPage(true));
+        byte[] screenshot = browserFactory.getPage().screenshot(new Page.ScreenshotOptions().setFullPage(true));
         Allure.addAttachment("Screenshot", new ByteArrayInputStream(screenshot));
     }
     public String getContent() {
-        return browserManager.getPage().content();
+        return browserFactory.getPage().content();
     }
 
 }

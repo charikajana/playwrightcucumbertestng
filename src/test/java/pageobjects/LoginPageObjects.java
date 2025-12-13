@@ -1,8 +1,8 @@
 package pageobjects;
 
 
-import org.sabre.Browserfactory.BrowserManager;
-import org.sabre.basefactory.BasePage;
+import org.sabre.Browserfactory.BrowserFactory;
+import org.sabre.basefactory.PlaywrightActions;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 /**
  * LoginPageObjects - Simple Page Object for HotelBooker Login Page
  */
-public class LoginPageObjects extends BasePage {
+public class LoginPageObjects extends PlaywrightActions {
     private static final Logger logger = Logger.getLogger(LoginPageObjects.class.getName());
 
     private  final String USERNAME_FIELD = "#ctl00_cphMainContent_txtUserName";
@@ -21,8 +21,8 @@ public class LoginPageObjects extends BasePage {
     private  final String USER_MENU_BUTTON_SELECTOR = "#lstUserMenu";
     private  final String LOGOUT_LINK_SELECTOR = "a:has-text('Log Out')";
 
-    public LoginPageObjects(BrowserManager browserManager) {
-        super(browserManager);
+    public LoginPageObjects(BrowserFactory browserFactory) {
+        super(browserFactory);
     }
 
     public void navigateToLoginPage() {

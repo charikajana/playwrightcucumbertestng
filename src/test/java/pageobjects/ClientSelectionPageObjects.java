@@ -1,14 +1,14 @@
 package pageobjects;
 
 
-import org.sabre.Browserfactory.BrowserManager;
-import org.sabre.basefactory.BasePage;
+import org.sabre.Browserfactory.BrowserFactory;
+import org.sabre.basefactory.PlaywrightActions;
 
-public class ClientSelectionPageObjects extends BasePage {
+public class ClientSelectionPageObjects extends PlaywrightActions {
 
     private final String SELECT_CLIENT_DROPDOWN = "#ctl00_ClientDropdownlist";
-    public ClientSelectionPageObjects(BrowserManager browserManager) {
-        super(browserManager);
+    public ClientSelectionPageObjects(BrowserFactory browserFactory) {
+        super(browserFactory);
     }
 
     public void selectClient(String clientName) {

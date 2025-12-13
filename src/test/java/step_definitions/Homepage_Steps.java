@@ -1,12 +1,9 @@
 package step_definitions;
 
-import io.cucumber.java.Scenario;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.sabre.Browserfactory.BrowserManager;
-import org.sabre.basefactory.BasePage;
 import org.testng.Assert;
 import pageobjects.HomePageObjects;
 import pageobjects.LoginPageObjects;

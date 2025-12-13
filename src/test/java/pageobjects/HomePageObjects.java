@@ -1,13 +1,11 @@
 package pageobjects;
 
-import io.cucumber.java.en.Then;
-import org.sabre.Browserfactory.BrowserManager;
-import org.sabre.basefactory.BasePage;
-import org.testng.Assert;
+import org.sabre.Browserfactory.BrowserFactory;
+import org.sabre.basefactory.PlaywrightActions;
 
 import java.util.logging.Logger;
 
-public class HomePageObjects extends BasePage {
+public class HomePageObjects extends PlaywrightActions {
     private static final Logger logger = Logger.getLogger(LoginPageObjects.class.getName());
     private  final String TOOLS_BUTTON = "#ctl00_ucNavigation_liTools";
     private  final String AGENCY_ADMIN_LINK = "//a[text()='Agency Admin']";
@@ -15,8 +13,8 @@ public class HomePageObjects extends BasePage {
     private  final String PASSWORD_FIELD = "#txtPassword";
     private  final String LOGIN_BUTTON = "#btnLogin";
     private  final String SEARCH_BUTTON = "#ctl00_btnSearch";
-    public HomePageObjects(BrowserManager browserManager) {
-        super(browserManager);
+    public HomePageObjects(BrowserFactory browserFactory) {
+        super(browserFactory);
     }
 
     public void clickOnToolsLink(){

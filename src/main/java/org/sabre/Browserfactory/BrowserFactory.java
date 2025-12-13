@@ -1,7 +1,6 @@
 package org.sabre.Browserfactory;
 
 import com.microsoft.playwright.*;
-import com.microsoft.playwright.junit.UsePlaywright;
 
 import java.awt.*;
 import java.io.IOException;
@@ -14,15 +13,15 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class BrowserManager {
+public class BrowserFactory {
     private static final ThreadLocal<Playwright> playwright = new ThreadLocal<>(); //used to create an instance of the Chromium, Firefox browser etc.
     private static final ThreadLocal<Browser> browser = new ThreadLocal<>(); //represents the browser instance.
     private static final ThreadLocal<BrowserContext> context = new ThreadLocal<>(); //is the isolated browser session.
     private static final ThreadLocal<Page> page = new ThreadLocal<>(); //is the single tab or window in the browser.
     public Properties properties;
-    private static final Logger logger = Logger.getLogger(BrowserManager.class.getName());
+    private static final Logger logger = Logger.getLogger(BrowserFactory.class.getName());
 
-    public BrowserManager() {
+    public BrowserFactory() {
         properties = new Properties();
         //creates a path to a configuration file. If "config.path" isn't set,
         //it defaults to a file located in "src/main/resources/config.properties
