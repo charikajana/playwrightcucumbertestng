@@ -20,7 +20,7 @@ This project is set up to run the `main` method of `RunCucumberTest` using the M
 
 **Command:**
 ```
-mvn clean test-compile exec:java@RunCucumberTest 
+mvn clean test-compile exec:java@RunCucumberTest
 
 if you want to pass additional arguments, you can do so by appending them after the command, like this:
 mvn clean test-compile exec:java@RunCucumberTest -DBrowserName=chrome -DThreadCount=2 -DEnv=DEV
