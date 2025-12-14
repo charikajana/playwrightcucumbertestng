@@ -4,12 +4,11 @@ import com.microsoft.playwright.Page;
 import io.cucumber.java.*;
 import io.qameta.allure.Allure;
 import org.sabre.Browserfactory.BrowserFactory;
-import org.sabre.util.ExecutionSummary;
-import org.sabre.util.EmailNotifier;
-import org.sabre.util.SummaryReportGenerator;
-import org.sabre.util.AllureDirectorySetup;
+import org.sabre.util.*;
 
 import jakarta.mail.MessagingException;
+import pageobjects.commons.TestDataGenerator;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileWriter;
@@ -28,6 +27,7 @@ public class Hooks {
     @BeforeAll
     public static void beforeAll() {
         System.out.println("\nExecuting test suite....");
+        ThreadLocalManager.setBrowserFactory(new BrowserFactory());
         AllureDirectorySetup.setup();
         ExecutionSummary.markStart();
         // Set environment and browser (replace with actual logic if needed)
@@ -87,7 +87,7 @@ public class Hooks {
     //Runs before each test
     @Before
     public void setup(Scenario scenario) {
-        System.out.println("\nStarted Before executing the test!");
+        TestDataGenerator testDataGenerator = new TestDataGenerator();
         browserFactory.setUp();
     }
 

@@ -3,10 +3,12 @@ package org.sabre.basefactory;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
+import com.microsoft.playwright.options.LoadState;
 import com.microsoft.playwright.options.SelectOption;
 import com.microsoft.playwright.options.WaitForSelectorState;
 import org.sabre.Browserfactory.BrowserFactory;
 import io.qameta.allure.Allure;
+import org.sabre.util.ThreadLocalManager;
 
 import java.io.ByteArrayInputStream;
 
@@ -17,7 +19,6 @@ public class PlaywrightActions {
         this.browserFactory = browserFactory;
     }
 
-    //In Java, "protected" means that the member can be accessed by classes in the same package or subclasses.
     protected BrowserFactory getBrowserManager() {
         return browserFactory;
     }
@@ -26,7 +27,7 @@ public class PlaywrightActions {
         browserFactory.getPage().navigate(url);
     }
 
-    public Locator Locator(String locator) {
+    public Locator getLocator(String locator) {
         return browserFactory.getPage().locator(locator);
     }
 
@@ -42,12 +43,12 @@ public class PlaywrightActions {
 
     public void waitAndClick(String locator)
     {
-        Locator(locator).waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
-        Locator(locator).click();
+        browserFactory.getPage().waitForSelector(locator, new Page.WaitForSelectorOptions().setState(WaitForSelectorState.VISIBLE));
+        browserFactory.getPage().click(locator);
     }
     public void waitAndEnterText(String locator, String text) {
-        Locator(locator).waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
-        Locator(locator).fill(text);
+        browserFactory.getPage().waitForSelector(locator, new Page.WaitForSelectorOptions().setState(WaitForSelectorState.VISIBLE));
+        browserFactory.getPage().fill(locator, text);
     }
 
     public void switchToNewWindowAfterClick(String Locator) {
@@ -56,6 +57,14 @@ public class PlaywrightActions {
         });
         browserFactory.setPage(newPage);
         browserFactory.getPage().bringToFront();
+        browserFactory.getPage().setDefaultTimeout(120000);
+    }
+    public void switchToOldWindow() {
+        int pagesCount = browserFactory.getContext().pages().size();
+        Page lastPage = browserFactory.getContext().pages().get(pagesCount - 1);
+        browserFactory.setPage(lastPage);
+        browserFactory.getPage().bringToFront();
+        browserFactory.getPage().setDefaultTimeout(120000);
     }
 
     public void selectDropdownByValue(String locator, String value) {
@@ -63,13 +72,13 @@ public class PlaywrightActions {
     }
 
     public void waitAndUncheckCheckbox(String locator) {
-        Locator(locator).waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
-        Locator(locator).setChecked(false);
+        browserFactory.getPage().waitForSelector(locator, new Page.WaitForSelectorOptions().setState(WaitForSelectorState.VISIBLE));
+        browserFactory.getPage().setChecked(locator,false);
     }
 
     public void waitAndCheckCheckbox(String locator) {
-        Locator(locator).waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
-        Locator(locator).setChecked(true);
+        browserFactory.getPage().waitForSelector(locator, new Page.WaitForSelectorOptions().setState(WaitForSelectorState.VISIBLE));
+        browserFactory.getPage().setChecked(locator,true);
     }
 
     public void closeCurrentPageAndSwitch(){
@@ -79,8 +88,9 @@ public class PlaywrightActions {
         browserFactory.setPage(firstPage);
         firstPage.bringToFront();
     }
-    public void takeScreenshot(String fileName) {
-        browserFactory.getPage().screenshot(new Page.ScreenshotOptions().setPath(java.nio.file.Paths.get("screenshots/" + fileName + ".png")));
+    public void takeScreenshot() {
+        byte[] screenshot = browserFactory.getPage().screenshot(new Page.ScreenshotOptions().setFullPage(true));
+        Allure.addAttachment("Screenshot", new ByteArrayInputStream(screenshot));
     }
 
     public void getScreenshot() {
@@ -89,6 +99,83 @@ public class PlaywrightActions {
     }
     public String getContent() {
         return browserFactory.getPage().content();
+    }
+    public String getText(String locator) {
+        return getLocator(locator).textContent();
+    }
+
+    public boolean isVisible(String locator) {
+        try {
+            return getLocator(locator).isVisible();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+     public int elementCount(String selector) {
+        return browserFactory.getPage().locator(selector).count();
+    }
+
+    public boolean isChecked(String locator) {
+        try {
+            return getLocator(locator).isChecked();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    public void Check(String locator) {
+        getLocator(locator).check();
+    }
+    public void UnCheck(String locator) {
+        getLocator(locator).uncheck();
+    }
+
+    public void waitForLoadState(){
+        browserFactory.getPage().waitForLoadState();
+    }
+    public String getTitle() {
+        return browserFactory.getPage().title();
+    }
+    public void reload() {
+        browserFactory.getPage().reload();
+    }
+
+    public String getCurrentUrl() {
+        return browserFactory.getPage().url();
+    }
+    public void closeCurrentWindow(){
+        browserFactory.getPage().close();
+    }
+    public void waitForPageLoad(){
+        browserFactory.getPage().waitForLoadState(LoadState.LOAD);
+        browserFactory.getPage().waitForFunction("() => document.readyState === 'complete'", null,
+                new Page.WaitForFunctionOptions().setTimeout(120000));
+        browserFactory.getPage().waitForFunction("() => typeof jQuery === 'undefined' || jQuery.active === 0", null,
+                new Page.WaitForFunctionOptions().setTimeout(120000));
+    }
+    public void waitForElementVisible(String selector) {
+        browserFactory.getPage().waitForSelector(selector, new Page.WaitForSelectorOptions().setState(WaitForSelectorState.VISIBLE));
+    }
+    /**
+     * Waits until either of the two locators is visible on the page.
+     * Returns the selector that became visible first, or null if timeout.
+     */
+    public String waitForEitherVisible(String selector1, String selector2, int timeoutMillis) {
+        long start = System.currentTimeMillis();
+        while (System.currentTimeMillis() - start < timeoutMillis) {
+            if (isVisible(selector1)) {
+                return selector1;
+            }
+            if (isVisible(selector2)) {
+                return selector2;
+            }
+            try {
+                Thread.sleep(200); // Polling interval
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                break;
+            }
+        }
+        return null;
     }
 
 }
